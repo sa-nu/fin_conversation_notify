@@ -43,6 +43,7 @@ ${sources ? `参照ソース: ${sources}` : ""}
 注意事項：
 - 日本語で要約
 - 簡潔かつ正確に
+- 絵文字は一切使用しないこと
 - JSONのみを出力`;
 
   const response = await anthropic.messages.create({
