@@ -22,8 +22,9 @@ export async function summarizeConversation(
 以下のFIN会話を分析し、JSON形式で要約してください。
 
 会話ID: ${conversation.id}
+滞在ステータス: ${conversation.stayStatus || "不明"}
+プラン: ${conversation.plan || "不明"}
 解決状態: ${conversation.resolutionState ?? "不明"}
-回答タイプ: ${conversation.lastAnswerType ?? "不明"}
 
 ユーザーの問い合わせ:
 ${userMsgs || "(なし)"}
@@ -35,7 +36,7 @@ ${sources ? `参照ソース: ${sources}` : ""}
 
 以下のJSON形式で出力してください：
 {
-  "inquiry": "ユーザーの問い合わせ内容を1-2文で簡潔に要約",
+  "inquiry": "ユーザーの問い合わせ内容を1-2文で簡潔に要約（滞在ステータスやプランの選択は含めず、実際の質問内容のみ）",
   "responseSummary": "FINの回答内容と対応結果を1-3文で簡潔に要約"
 }
 

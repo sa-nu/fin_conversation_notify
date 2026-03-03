@@ -24,6 +24,8 @@ export interface FinConversation {
   resolutionState: ResolutionState;
   lastAnswerType: LastAnswerType;
   contentSources: ContentSource[];
+  stayStatus: string;
+  plan: string;
   userMessages: string[];
   finResponses: string[];
   conversationUrl: string;

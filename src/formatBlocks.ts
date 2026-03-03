@@ -51,6 +51,14 @@ export function formatNotificationBlocks(
           type: "mrkdwn",
           text: `*コンタクト:*\n${conversation.contactName}`,
         },
+        {
+          type: "mrkdwn",
+          text: `*滞在ステータス:*\n${conversation.stayStatus || "不明"}`,
+        },
+        {
+          type: "mrkdwn",
+          text: `*プラン:*\n${conversation.plan || "不明"}`,
+        },
       ],
     },
     { type: "divider" },
@@ -58,7 +66,7 @@ export function formatNotificationBlocks(
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*:speech_balloon: ユーザーの問い合わせ*\n${summary.inquiry}`,
+        text: `*:speech_balloon: 問い合わせ内容*\n${summary.inquiry}`,
       },
     },
     {

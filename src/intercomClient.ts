@@ -38,13 +38,12 @@ function parseConversation(
 
   const parts = conv.conversation_parts?.conversation_parts ?? [];
 
-  const userMessages: string[] = [];
-  const finResponses: string[] = [];
+  // ワークフロー選択: source.bodyが滞在ステータス
+  const stayStatus = conv.source?.body ? stripHtml(conv.source.body) : "";
 
-  const sourceBody = conv.source?.body;
-  if (sourceBody) {
-    userMessages.push(stripHtml(sourceBody));
-  }
+  // ユーザーメッセージを収集（最初のユーザー返信=プラン、以降=問い合わせ）
+  const allUserMessages: string[] = [];
+  const finResponses: string[] = [];
 
   for (const part of parts) {
     const body = part.body ? stripHtml(part.body) : "";
@@ -54,9 +53,13 @@ function parseConversation(
     if (author?.type === "bot" || author?.from_ai_agent) {
       finResponses.push(body);
     } else if (author?.type === "user" || author?.type === "lead") {
-      userMessages.push(body);
+      allUserMessages.push(body);
     }
   }
+
+  // 最初のユーザー返信=プラン選択、残り=実際の問い合わせ
+  const plan = allUserMessages[0] ?? "";
+  const userMessages = allUserMessages.slice(1);
 
   const contentSources: ContentSource[] = (
     aiAgent?.content_sources?.content_sources ?? []
@@ -83,6 +86,8 @@ function parseConversation(
     resolutionState: (aiAgent?.resolution_state ?? null) as ResolutionState,
     lastAnswerType: (aiAgent?.last_answer_type ?? null) as LastAnswerType,
     contentSources,
+    stayStatus,
+    plan,
     userMessages,
     finResponses,
     conversationUrl: `https://app.intercom.com/a/apps/${appId}/inbox/inbox/all/conversations/${conv.id}`,
