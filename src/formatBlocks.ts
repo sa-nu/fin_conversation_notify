@@ -47,7 +47,18 @@ export function formatNotificationBlocks(
         text: `${resolution.emoji} ${resolution.label}｜${conversation.stayStatus || "不明"}｜${conversation.plan || "不明"}`,
       },
     },
-    { type: "divider" },
+    ...(conversation.stayStatus === "滞在中"
+      ? [
+          {
+            type: "section" as const,
+            text: {
+              type: "mrkdwn" as const,
+              text: "<!subteam^S0951R6UJMP>",
+            },
+          },
+        ]
+      : []),
+    { type: "divider" as const },
     {
       type: "section",
       text: {
