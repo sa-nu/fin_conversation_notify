@@ -1,0 +1,8 @@
+{
+  "buildCommand": "",
+  "functions": {
+    "api/intercom/webhook.ts": {
+      "maxDuration": 120
+    }
+  }
+}
