@@ -36,7 +36,7 @@ export function formatNotificationBlocks(
       type: "header",
       text: {
         type: "plain_text",
-        text: `${resolution.emoji} FIN会話通知`,
+        text: "FIN会話通知",
         emoji: true,
       },
     },
@@ -66,14 +66,14 @@ export function formatNotificationBlocks(
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*:speech_balloon: 問い合わせ内容*\n${summary.inquiry}`,
+        text: `*問い合わせ内容*\n${summary.inquiry}`,
       },
     },
     {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*:robot_face: FINの回答*\n${summary.responseSummary}`,
+        text: `*FINの回答*\n${summary.responseSummary}`,
       },
     },
   ];
