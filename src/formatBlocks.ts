@@ -42,24 +42,10 @@ export function formatNotificationBlocks(
     },
     {
       type: "section",
-      fields: [
-        {
-          type: "mrkdwn",
-          text: `*解決状態:*\n${resolution.emoji} ${resolution.label}`,
-        },
-        {
-          type: "mrkdwn",
-          text: `*コンタクト:*\n${conversation.contactName}`,
-        },
-        {
-          type: "mrkdwn",
-          text: `*滞在ステータス:*\n${conversation.stayStatus || "不明"}`,
-        },
-        {
-          type: "mrkdwn",
-          text: `*プラン:*\n${conversation.plan || "不明"}`,
-        },
-      ],
+      text: {
+        type: "mrkdwn",
+        text: `${resolution.emoji} ${resolution.label}｜${conversation.stayStatus || "不明"}｜${conversation.plan || "不明"}`,
+      },
     },
     { type: "divider" },
     {
