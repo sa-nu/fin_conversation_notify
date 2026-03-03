@@ -73,11 +73,8 @@ export function formatNotificationBlocks(
   if (conversation.contentSources.length > 0) {
     const sourcesList = conversation.contentSources
       .slice(0, 5)
-      .map((src) =>
-        src.url
-          ? `- <${src.url}|${src.title || "Untitled"}>`
-          : `- ${src.title || "Untitled"}`,
-      )
+      .filter((src) => src.title)
+      .map((src) => `- ${src.title}`)
       .join("\n");
 
     blocks.push({
