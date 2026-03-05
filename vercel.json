@@ -3,6 +3,15 @@
   "functions": {
     "api/intercom/webhook.ts": {
       "maxDuration": 120
+    },
+    "api/cron/notify.ts": {
+      "maxDuration": 120
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/notify",
+      "schedule": "*/5 * * * *"
+    }
+  ]
 }

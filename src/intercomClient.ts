@@ -25,6 +25,51 @@ export async function fetchConversationById(
 }
 
 /**
+ * 指定秒数以内に更新されたクローズ済みFIN会話を検索・取得する。
+ */
+export async function fetchRecentClosedFinConversations(
+  sinceSeconds: number,
+): Promise<FinConversation[]> {
+  const now = Math.floor(Date.now() / 1000);
+  const since = now - sinceSeconds;
+
+  const conversations: FinConversation[] = [];
+
+  let page = await client.conversations.search({
+    query: {
+      operator: "AND",
+      value: [
+        { field: "ai_agent_participated", operator: "=", value: "true" },
+        { field: "updated_at", operator: ">", value: since },
+        { field: "state", operator: "=", value: "closed" },
+      ],
+    },
+    pagination: { per_page: 50 },
+  });
+
+  while (true) {
+    for (const convSummary of page.data) {
+      try {
+        const fullConv = await client.conversations.find({
+          conversation_id: convSummary.id,
+        });
+        const parsed = parseConversation(fullConv);
+        if (parsed) {
+          conversations.push(parsed);
+        }
+      } catch (error) {
+        console.warn(`会話 ${convSummary.id} の取得に失敗: ${error}`);
+      }
+    }
+
+    if (!page.hasNextPage()) break;
+    page = await page.getNextPage();
+  }
+
+  return conversations;
+}
+
+/**
  * Intercom APIのレスポンスをFinConversation型にパースする。
  * FIN会話でない場合（ai_agentが無い場合）はnullを返す。
  */
