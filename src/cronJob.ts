@@ -1,7 +1,7 @@
 import { fetchRecentClosedFinConversations } from "./intercomClient.js";
 import { summarizeConversation } from "./summarizer.js";
 import { formatNotificationBlocks } from "./formatBlocks.js";
-import { postNotification } from "./slackClient.js";
+import { postNotification, isAlreadyNotified } from "./slackClient.js";
 
 /** ポーリング間隔（秒）: 5分 + 余裕30秒 */
 const POLLING_WINDOW_SECONDS = 330;
@@ -32,6 +32,11 @@ export async function runNotifyJob(): Promise<{
 
     for (const conversation of conversations) {
       try {
+        if (await isAlreadyNotified(targetChannelId, conversation.id)) {
+          console.log(`[Cron] 会話 ${conversation.id} は通知済み、スキップ`);
+          continue;
+        }
+
         const summary = await summarizeConversation(conversation);
         const blocks = formatNotificationBlocks(conversation, summary);
         const fallbackText = `FIN会話通知: ${summary.inquiry}`;
